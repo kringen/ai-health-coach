@@ -1,0 +1,81 @@
+# Kustomization file for base AI Health Coach deployment
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: health-coach-base
+
+# Resources to include in the deployment
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+# Common labels applied to all resources
+commonLabels:
+  app.kubernetes.io/name: health-coach
+  app.kubernetes.io/version: "1.0.0"
+  app.kubernetes.io/component: health-app
+  app.kubernetes.io/part-of: health-coach-platform
+
+# Common annotations
+commonAnnotations:
+  contact: "admin@example.com"
+  documentation: "https://github.com/example/health-coach"
+
+# Namespace where resources will be deployed
+namespace: health-coach
+
+# ConfigMap generators for application configuration
+configMapGenerator:
+  - name: health-coach-config
+    literals:
+      - ENVIRONMENT=production
+      - PORT=8080
+      - DB_HOST=mariadb.lan
+      - DB_PORT=3306
+      - DB_NAME=healthtracker
+      - DB_USER=healthtracker
+      - DB_TLS=false
+      - AI_PROVIDER=anthropic
+      - OLLAMA_BASE_URL=http://192.168.1.66:11434
+      - OLLAMA_MODEL=llama3.2:latest
+      - ANTHROPIC_BASE_URL=https://api.anthropic.com
+      - ANTHROPIC_MODEL=claude-sonnet-5-5
+      - ANTHROPIC_API_VERSION=2023-06-01
+      - GOOGLE_REDIRECT_URL=https://tracker.kringen.io/auth/callback
+
+# Images to use (can be overridden in overlays)
+images:
+  - name: health-coach
+    newTag: latest
+
+# Patches to apply to resources
+patches:
+  # Add resource limits to all containers
+  - target:
+      kind: Deployment
+      name: health-coach
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources/requests
+        value:
+          memory: "256Mi"
+          cpu: "250m"
+      - op: add
+        path: /spec/template/spec/containers/0/resources/limits
+        value:
+          memory: "512Mi"
+          cpu: "500m"
+
+# Replicas configuration
+replicas:
+  - name: health-coach
+    count: 2
+
+# Name prefix for all resources
+namePrefix: ""
+
+# Name suffix for all resources
+nameSuffix: ""
+

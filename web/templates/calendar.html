@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Coach</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">🌱 AI Health Coach</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Calendar</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>Health Calendar</h1>
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="btn btn-outline">&lt;</button>
+                    <h2 id="currentMonth"></h2>
+                    <button id="nextMonth" class="btn btn-outline">&gt;</button>
+                </div>
+                <div id="calendar" class="calendar-grid"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/calendar.js"></script>
+</body>
+</html>

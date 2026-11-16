@@ -28,6 +28,10 @@ go.work.sum
 # env file
 .env
 
+# Local Kubernetes settings and credentials
+/k8s/overlays/local/config.env
+/k8s/secrets/
+
 # Editor/IDE
 # .idea/
 # .vscode/

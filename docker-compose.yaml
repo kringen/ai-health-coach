@@ -1,0 +1,149 @@
+# Docker Compose configuration for local development
+version: '3.8'
+
+services:
+  # AI Health Coach Application
+  health-coach:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=development
+      - PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=healthtracker
+      - DB_USER=healthtracker
+      - DB_PASSWORD=healthtracker123
+      - DB_SSLMODE=disable
+      - AI_PROVIDER=${AI_PROVIDER:-ollama}
+      - OLLAMA_BASE_URL=http://192.168.1.66:11434
+      - OLLAMA_MODEL=llama3.2:latest
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-https://api.anthropic.com}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-5-5}
+      - ANTHROPIC_API_VERSION=${ANTHROPIC_API_VERSION:-2023-06-01}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - GOOGLE_REDIRECT_URL=${GOOGLE_REDIRECT_URL:-http://localhost:8080/auth/callback}
+      - SESSION_SECRET=${SESSION_SECRET:-default-session-secret-change-in-production}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./web:/app/web:ro,Z  # Mount web assets for development; Z relabels for rootless Podman + SELinux
+    networks:
+      - health-coach-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=healthtracker
+      - POSTGRES_USER=healthtracker
+      - POSTGRES_PASSWORD=healthtracker123
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - health-coach-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U healthtracker -d healthtracker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Nginx reverse proxy for development
+  nginx:
+    image: nginx:alpine
+    ports:
+      # Rootless Podman cannot bind privileged host ports below 1024.
+      - "8088:80"
+    volumes:
+      - ./scripts/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - health-coach
+    networks:
+      - health-coach-network
+    restart: unless-stopped
+
+  # Adminer for database management (development only)
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    depends_on:
+      - postgres
+    networks:
+      - health-coach-network
+    restart: unless-stopped
+    profiles:
+      - dev-tools
+
+  # Prometheus for monitoring (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./scripts/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - health-coach-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+  # Grafana for dashboards (optional)
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - health-coach-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+# Networks
+networks:
+  health-coach-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local

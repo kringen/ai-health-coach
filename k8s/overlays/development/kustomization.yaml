@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: health-coach-development
+
+resources:
+  - ../../base
+
+namespace: health-coach-development
+
+commonLabels:
+  environment: development
+  tier: development
+
+images:
+  - name: health-coach
+    newName: docker.io/kringen/health-coach
+    newTag: latest
+
+replicas:
+  - name: health-coach
+    count: 1
+
+patches:
+- target:
+    kind: Deployment
+    name: health-coach
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value
+      value: development

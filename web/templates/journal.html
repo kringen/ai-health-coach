@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Entry - AI Health Coach</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">🌱 AI Health Coach</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Calendar</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="journal-header">
+                <a href="/" class="btn btn-outline">&larr; Back to Calendar</a>
+                <h1>Journal Entry</h1>
+                <span id="entryDate" class="date-display"></span>
+            </div>
+
+            <form id="journalForm" class="journal-form">
+                <div class="form-grid">
+                    <!-- Food Intake -->
+                    <div class="form-group">
+                        <label for="foodIntake">Food Intake</label>
+                        <textarea id="foodIntake" name="foodIntake" placeholder="Describe your meals today..." rows="3"></textarea>
+                    </div>
+
+                    <!-- Water Intake -->
+                    <div class="form-group">
+                        <label for="waterIntake">Water Intake (liters)</label>
+                        <input type="number" id="waterIntake" name="waterIntake" step="0.1" min="0" placeholder="2.5">
+                    </div>
+
+                    <!-- Sleep -->
+                    <div class="form-group">
+                        <label>Sleep</label>
+                        <div class="input-row">
+                            <input type="time" id="bedTime" name="bedTime" placeholder="Bedtime">
+                            <input type="time" id="wakeTime" name="wakeTime" placeholder="Wake time">
+                        </div>
+                        <div class="rating-group">
+                            <label for="sleepQuality">Sleep Quality (1-5)</label>
+                            <div class="rating-buttons">
+                                <input type="radio" id="sleep1" name="sleepQuality" value="1">
+                                <label for="sleep1">1</label>
+                                <input type="radio" id="sleep2" name="sleepQuality" value="2">
+                                <label for="sleep2">2</label>
+                                <input type="radio" id="sleep3" name="sleepQuality" value="3">
+                                <label for="sleep3">3</label>
+                                <input type="radio" id="sleep4" name="sleepQuality" value="4">
+                                <label for="sleep4">4</label>
+                                <input type="radio" id="sleep5" name="sleepQuality" value="5">
+                                <label for="sleep5">5</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alcohol -->
+                    <div class="form-group">
+                        <label for="alcoholUnits">Alcohol (units)</label>
+                        <input type="number" id="alcoholUnits" name="alcoholUnits" step="0.5" min="0" placeholder="0">
+                    </div>
+
+                    <!-- Exercise -->
+                    <div class="form-group">
+                        <label for="exerciseType">Exercise Type</label>
+                        <input type="text" id="exerciseType" name="exerciseType" placeholder="Running, cycling, gym...">
+                        <div class="input-row">
+                            <input type="number" id="exerciseDuration" name="exerciseDuration" min="0" placeholder="Duration (min)">
+                            <div class="rating-group">
+                                <label for="exerciseIntensity">Intensity (1-5)</label>
+                                <div class="rating-buttons">
+                                    <input type="radio" id="intensity1" name="exerciseIntensity" value="1">
+                                    <label for="intensity1">1</label>
+                                    <input type="radio" id="intensity2" name="exerciseIntensity" value="2">
+                                    <label for="intensity2">2</label>
+                                    <input type="radio" id="intensity3" name="exerciseIntensity" value="3">
+                                    <label for="intensity3">3</label>
+                                    <input type="radio" id="intensity4" name="exerciseIntensity" value="4">
+                                    <label for="intensity4">4</label>
+                                    <input type="radio" id="intensity5" name="exerciseIntensity" value="5">
+                                    <label for="intensity5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group full-width">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" placeholder="Additional thoughts, feelings, or observations..." rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Entry</button>
+                    <button type="button" id="evaluateDaily" class="btn btn-secondary">Daily Evaluation</button>
+                    <button type="button" id="evaluateHistorical" class="btn btn-secondary">Historical Analysis</button>
+                </div>
+            </form>
+
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Saving your entry...</p>
+            </div>
+
+            <div id="message" class="message" style="display: none;"></div>
+        </div>
+    </main>
+
+    <script src="/static/journal.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Services for AI Health Coach components
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-coach
+  labels:
+    app: health-coach
+    component: webapp
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: health-coach
+    component: webapp

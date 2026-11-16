@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Health Chat - AI Health Coach</title>
+    <link rel="stylesheet" href="/static/style.css?v=1725404801">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">🌱 AI Health Coach</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Calendar</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="chat-header">
+                <a href="javascript:history.back()" class="btn btn-outline">&larr; Back</a>
+                <h1>AI Health Evaluation</h1>
+                <span id="chatDate" class="date-display"></span>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <p>Hello! I'm your AI health coach. I'll analyze your journal entry and provide personalized insights and recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <button id="requestEvaluation" class="btn btn-primary">
+                        Get Health Evaluation
+                    </button>
+                    <div class="evaluation-options">
+                        <label>
+                            <input type="radio" name="evaluationType" value="daily" checked>
+                            Daily Analysis
+                        </label>
+                        <label>
+                            <input type="radio" name="evaluationType" value="historical">
+                            Historical Comparison
+                        </label>
+                    </div>
+
+                    <!-- Follow-up chat input (hidden initially) -->
+                    <div id="followupContainer" class="followup-container" style="display: none;">
+                        <div class="suggested-questions">
+                            <h4>💡 Quick Questions</h4>
+                            <div class="question-pills">
+                                <button class="pill-btn" data-question="What specific foods should I focus on today?">🍎 Food Focus</button>
+                                <button class="pill-btn" data-question="How can I improve my sleep quality?">😴 Sleep Tips</button>
+                                <button class="pill-btn" data-question="What exercise would be best for me today?">💪 Exercise Plan</button>
+                                <button class="pill-btn" data-question="How can I increase my water intake?">💧 Hydration</button>
+                                <button class="pill-btn" data-question="What are some stress management techniques?">🧘 Stress Relief</button>
+                                <button class="pill-btn" data-question="How can I maintain consistent habits?">📈 Habit Building</button>
+                            </div>
+                        </div>
+
+                        <div class="chat-input">
+                            <input type="text" id="followupInput" placeholder="Ask a follow-up question..." maxlength="500">
+                            <button id="sendFollowup" class="btn btn-primary">Send</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="evaluationLoading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyzing your health data...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/chat.js?v=1725404801"></script>
+</body>
+</html>

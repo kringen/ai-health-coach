@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Health Coach</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">🌱 AI Health Coach</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Calendar</a>
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1>Health Dashboard</h1>
+            
+            <div class="dashboard-controls">
+                <select id="timeRange" class="form-control">
+                    <option value="7">Last 7 days</option>
+                    <option value="30" selected>Last 30 days</option>
+                    <option value="90">Last 90 days</option>
+                </select>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Average Water</h3>
+                    <div class="stat-value" id="avgWater">0.0L</div>
+                    <div class="stat-trend" id="waterTrend">No data</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Sleep</h3>
+                    <div class="stat-value" id="avgSleep">0/5</div>
+                    <div class="stat-trend" id="sleepTrend">No data</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Exercise Days</h3>
+                    <div class="stat-value" id="exerciseDays">0</div>
+                    <div class="stat-trend" id="exerciseTrend">No data</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Entries</h3>
+                    <div class="stat-value" id="totalEntries">0</div>
+                    <div class="stat-trend" id="entriesTrend">No data</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Water Intake Trend</h3>
+                    <canvas id="waterChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Sleep Quality Trend</h3>
+                    <canvas id="sleepChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Exercise Activity</h3>
+                    <canvas id="exerciseChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Weekly Summary</h3>
+                    <canvas id="summaryChart"></canvas>
+                </div>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading dashboard data...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
