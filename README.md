@@ -257,7 +257,7 @@ make check
 
 ### Kubernetes Deployment
 
-The Kubernetes manifests deploy the app and connect to an existing MariaDB server. They do not create a database in the cluster. Before deploying, ensure the cluster can reach the MariaDB host configured as `DB_HOST` in `k8s/base/kustomization.yaml` (currently `mariadb.lan`), and that the database/user already exist with permission to run migrations.
+The Kubernetes manifests deploy the app and connect to an existing PostgreSQL server. They do not create a database in the cluster. Before deploying, ensure the cluster can reach the PostgreSQL host configured as `DB_HOST` in `k8s/base/kustomization.yaml` (currently `postgres.lan`), and that the database/user already exist with permission to run migrations.
 
 #### Development Deployment
 
@@ -276,9 +276,9 @@ Run these commands from the repository root. The current development overlay use
    kubectl create namespace health-coach-development \
      --dry-run=client -o yaml | kubectl apply -f -
 
-   kubectl create secret generic mariadb-secret \
+    kubectl create secret generic postgres-secret \
      --namespace health-coach-development \
-     --from-file=password=k8s/secrets/mariadb-password \
+       --from-file=password=k8s/secrets/postgres-password \
      --dry-run=client -o yaml | kubectl apply -f -
 
    kubectl create secret generic app-secrets \
