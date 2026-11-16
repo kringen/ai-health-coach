@@ -276,15 +276,9 @@ Run these commands from the repository root. The current development overlay use
    kubectl create namespace health-coach-development \
      --dry-run=client -o yaml | kubectl apply -f -
 
-    kubectl create secret generic postgres-secret \
-     --namespace health-coach-development \
-       --from-file=password=k8s/secrets/postgres-password \
-     --dry-run=client -o yaml | kubectl apply -f -
+    kubectl create secret generic postgres-secret --namespace health-coach-development --from-file=password=k8s/secrets/postgres-password --dry-run=client -o yaml | kubectl apply -f -
 
-   kubectl create secret generic app-secrets \
-     --namespace health-coach-development \
-     --from-env-file=k8s/secrets/app-secrets.env \
-     --dry-run=client -o yaml | kubectl apply -f -
+    kubectl create secret generic app-secrets --namespace health-coach-development --from-env-file=k8s/secrets/app-secrets.env --dry-run=client -o yaml | kubectl apply -f -
    ```
 
    `app-secrets.env` must contain `google-client-id`, `google-client-secret`, `session-secret`, and `anthropic-api-key` because the current base configuration selects Anthropic.
